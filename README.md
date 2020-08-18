@@ -1,4 +1,4 @@
-# padelloversapp
+# Padel Lovers App
 
 A new Flutter project.
 
