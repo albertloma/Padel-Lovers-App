@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:padelloversapp/src/models/CouplePlayers.dart';
+import 'package:padelloversapp/src/models/League.dart';
 
 class CreateLeaguePage extends StatefulWidget {
   const CreateLeaguePage({Key key}) : super(key: key);
@@ -8,10 +10,16 @@ class CreateLeaguePage extends StatefulWidget {
 }
 
 class _CreateLeaguePageState extends State<CreateLeaguePage> {
+
+  League newLeague = new League();
   int _index = 0;
+  List<Widget> coupleList = [];
+  List<CouplePlayers> coupleListModel = [];
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: BodyCreateLeague(context),
     );
@@ -50,19 +58,15 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
     );
     ;
   }
-
   Widget stepperCreateLeague(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Stepper(
         steps: [
-          Step1_NombrarLiga(context),          
+          step1_NombrarLiga(context),          
+          step2_JugadoresAdd(context),
           Step(
-            title: Text("Second"),
-            content: Text("This is our second example."),
-          ),
-          Step(
-            title: Text("Third"),
+            title: Text("xdd"),
             content: Text("This is our third example."),
           ),
           Step(
@@ -77,20 +81,22 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
           });
         },
         onStepCancel: () {
-          print("You are clicking the cancel button.");
+          _index = _index;
         },
         onStepContinue: () {
+          //League Name Validation
           setState(() {
-            _index += _index;
+            _index += 1;
           });
-          print("You are clicking the continue button.");
+
+          printPlayerList();
         },
       ),
     );
   }
 
 
-  Step Step1_NombrarLiga(BuildContext context){
+  Step step1_NombrarLiga(BuildContext context){
     return Step(
             state: StepState.indexed,
             title:
@@ -106,16 +112,136 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               ),
               Padding(padding: EdgeInsets.all(10)),
               TextFormField(
+                validator: (value){
+                  if(value.isEmpty){
+                    return 'Porfavor, rellena este campo';
+                  }
+                  return null;
+                },
                     decoration: InputDecoration(
                       filled: true,
                       hintText: '',
                       labelText: 'Nombre de Liga',
                     ),
                     onChanged: (value) {
+                      setState(() {
+                        newLeague.name = value;
+                      });
                     },
                   ),
               ]
             ),
           );
   }
+
+  Step step2_JugadoresAdd(BuildContext context){
+    return Step(
+            state: StepState.indexed,
+            title:
+             Text(
+              "Añade Jugadores",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            content: Column(
+              children: [
+                Text(
+                "Ahora añade a todas las parejas de jugadores que van a participar en la liga ${newLeague.name == null ? '': newLeague.name}:",
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              Column(
+                children: coupleList,
+              ),
+                            if(coupleList.length > 0)
+              FlatButton(
+                    highlightColor: Colors.lightGreen[100],
+                    child: const Text(
+                      'Borrar última pareja',
+                      style: TextStyle(color: Colors.red, fontSize: 17),
+                    ),
+                    onPressed: () {
+                        setState(() {
+                          coupleList.removeLast();
+                          coupleListModel.removeLast();
+                        });
+                    },
+              ),
+              FlatButton(
+                    highlightColor: Colors.lightGreen[100],
+                    child: const Text(
+                      'Añadir nueva pareja',
+                      style: TextStyle(color: Colors.lightGreen, fontSize: 17),
+                    ),
+                    onPressed: () {
+                        setState(() {
+                          coupleList.add(coupleNameInputItem(coupleList.length+1));
+                          coupleListModel.add(CouplePlayers());
+                        });
+                    },
+              )
+              ]
+            ),
+          );
+  }
+
+
+  Widget coupleNameInputItem(int coupleNumber){
+    return Container(
+      child: Center(
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0.0)),
+          ),
+          elevation: 5.0,
+          child: Container(
+            padding: EdgeInsets.only(top: 10, bottom: 10),
+            width: MediaQuery.of(context).size.width,
+            child: Column(children: [
+              ListTile(
+                title: Text(
+                  'Pareja ${coupleNumber}',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                subtitle: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Nombre del Jugador 1',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          coupleListModel[coupleNumber-1].player1Name = value;
+                        });
+                      },
+                   ),
+                   TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Nombre del Jugador 2',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          coupleListModel[coupleNumber-1].player2Name = value;
+                        });
+                      },
+                   )
+                  ]
+
+                ),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void printPlayerList(){
+    int i = 1;
+    for (var couple in coupleListModel) {
+      print('pareja '+i.toString());
+      print(couple.player1Name + ' and '+ couple.player2Name);
+      i++;
+    }
+  }
+
 }
