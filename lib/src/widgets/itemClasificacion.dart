@@ -1,6 +1,6 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
-import 'package:padelloversapp/widgets/itemStatistic.dart';
+import 'package:padelloversapp/src/widgets/itemStatistic.dart';
 
 class ClasificationItem extends StatelessWidget {
   const ClasificationItem(

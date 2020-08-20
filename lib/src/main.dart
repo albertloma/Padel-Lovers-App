@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:padelloversapp/homepage.dart';
-import 'package:padelloversapp/selectLeague.dart';
+import 'package:padelloversapp/src/homepage.dart';
+import 'package:padelloversapp/src/selectLeague.dart';
 
 void main() {
   runApp(MyApp());

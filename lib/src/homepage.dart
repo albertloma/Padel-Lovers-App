@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:padelloversapp/clasificationPage.dart';
-import 'package:padelloversapp/resultPage.dart';
-import 'package:padelloversapp/selectLeague.dart';
-import 'package:padelloversapp/widgets/itemResultList.dart';
+import 'package:padelloversapp/src/clasificationPage.dart';
+import 'package:padelloversapp/src/resultPage.dart';
+import 'package:padelloversapp/src/selectLeague.dart';
+import 'package:padelloversapp/src/widgets/itemResultList.dart';
 
 class homePage extends StatefulWidget {
   static const double appbarheight = 50.0;

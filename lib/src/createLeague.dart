@@ -56,17 +56,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
       margin: EdgeInsets.only(top: 10),
       child: Stepper(
         steps: [
-          Step(
-            state: StepState.indexed,
-            title: Text(
-              "Nombra tu Liga",
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            content: Text(
-              "Primero debes darle un nombre a tu liga. Asegurate que sea reconocible e identificativo.",
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ),
+          Step1_NombrarLiga(context),          
           Step(
             title: Text("Second"),
             content: Text("This is our second example."),
@@ -97,5 +87,35 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
         },
       ),
     );
+  }
+
+
+  Step Step1_NombrarLiga(BuildContext context){
+    return Step(
+            state: StepState.indexed,
+            title:
+             Text(
+              "Nombra tu Liga",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            content: Column(
+              children: [
+                Text(
+                "Primero debes darle un nombre a tu liga. Asegurate que sea reconocible e identificativo.",
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              TextFormField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintText: '',
+                      labelText: 'Nombre de Liga',
+                    ),
+                    onChanged: (value) {
+                    },
+                  ),
+              ]
+            ),
+          );
   }
 }

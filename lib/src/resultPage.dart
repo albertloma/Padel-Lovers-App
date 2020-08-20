@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:padelloversapp/widgets/itemResultList.dart';
+import 'package:padelloversapp/src/widgets/itemResultList.dart';
 
 class resultPage extends StatelessWidget {
   const resultPage({Key key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:padelloversapp/widgets/itemClasificacion.dart';
-import 'package:padelloversapp/widgets/itemStatistic.dart';
+import 'package:padelloversapp/src/widgets/itemClasificacion.dart';
+import 'package:padelloversapp/src/widgets/itemStatistic.dart';
 
 class clasificationPage extends StatelessWidget {
   const clasificationPage({Key key}) : super(key: key);

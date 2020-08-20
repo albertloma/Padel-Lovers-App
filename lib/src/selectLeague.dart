@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:padelloversapp/createLeague.dart';
-import 'package:padelloversapp/widgets/itemLeague.dart';
-import 'package:padelloversapp/widgets/itemResultList.dart';
+import 'package:padelloversapp/src/createLeague.dart';
+import 'package:padelloversapp/src/widgets/itemLeague.dart';
+import 'package:padelloversapp/src/widgets/itemResultList.dart';
 
 class LeagueSelection extends StatelessWidget {
   const LeagueSelection({Key key}) : super(key: key);
