@@ -21,6 +21,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
 
   bool errorOnPlayesAdd = false;
 
+  int _radioValue = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,10 +70,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
         steps: [
           step1_NombrarLiga(context),
           step2_JugadoresAdd(context),
-          Step(
-            title: Text("xdd"),
-            content: Text("This is our third example."),
-          ),
+          step3_EstablecerReglas(context),
           Step(
             title: Text("Forth"),
             content: Text("This is our forth example."),
@@ -111,10 +109,20 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
 
             if (coupleListModel.isEmpty) {
               print('empty players');
+              setState(() {
+                errorOnPlayesAdd = true;
+              });
               return;
             } else if (emptyPlayerFound) {
               print('empty players fields');
+              setState(() {
+                errorOnPlayesAdd = true;
+              });
               return;
+            } else {
+              setState(() {
+                errorOnPlayesAdd = false;
+              });
             }
           }
           if (_index >= 3) return;
@@ -209,9 +217,16 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
             });
           },
         ),
-        Text('Porfavor, completa todos los campos requeridos',
-            textAlign: TextAlign.start,
-            style: TextStyle(color: Colors.red, fontSize: 12))
+        if (errorOnPlayesAdd)
+          Container(
+            alignment: Alignment.topLeft,
+            child: Text('Porfavor, completa todos los campos requeridos',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal)),
+          )
       ]),
     );
   }
@@ -261,6 +276,97 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
         ),
       ),
     );
+  }
+
+  Step step3_EstablecerReglas(BuildContext context) {
+    return Step(
+      state: StepState.indexed,
+      title: Text(
+        "Establece Reglas",
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      content: Column(children: [
+        Text(
+          "Ahora debes establecer la contraseña única de la liga. Cualquiera que posea esta contraseña podrá ver, añadir y editar resultados:",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        Padding(padding: EdgeInsets.all(10)),
+        Form(
+          key: _textKey,
+          child: TextFormField(
+            autovalidate: _autovalidate,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Porfavor, rellena este campo';
+              }
+            },
+            decoration: InputDecoration(
+              filled: true,
+              hintText: '',
+              labelText: 'Contraseña',
+            ),
+            onChanged: (value) {
+              setState(() {
+                newLeague.password = value;
+              });
+            },
+          ),
+        ),
+        Padding(padding: EdgeInsets.all(10)),
+        Text(
+          "A continuación decide quien puede ver y editar los resultados:",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        Row(
+          children: [
+            Radio(
+                value: 0,
+                groupValue: _radioValue,
+                onChanged: _handleRadioValueChange),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Público', style: Theme.of(context).textTheme.bodyText1),
+                Text('(Siempre visible y editable con contraseña)',
+                    style: Theme.of(context).textTheme.bodyText1)
+              ],
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Radio(
+                value: 1,
+                groupValue: _radioValue,
+                onChanged: _handleRadioValueChange),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Privado', style: Theme.of(context).textTheme.bodyText1),
+                Text('(Solo visible y editable con contraseña)',
+                    style: Theme.of(context).textTheme.bodyText1)
+              ],
+            )
+          ],
+        ),
+      ]),
+    );
+  }
+
+  void _handleRadioValueChange(int value) {
+    setState(() {
+      _radioValue = value;
+      print(_radioValue);
+      switch (_radioValue) {
+        case 0:
+          print(_radioValue);
+          break;
+        case 1:
+          break;
+        case 2:
+          break;
+      }
+    });
   }
 
   void printPlayerList() {
