@@ -289,10 +289,10 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
         Text(
           "Ahora debes establecer la contraseña única de la liga. Cualquiera que posea esta contraseña podrá ver, añadir y editar resultados:",
           style: Theme.of(context).textTheme.bodyText1,
+          softWrap: true,
         ),
         Padding(padding: EdgeInsets.all(10)),
         Form(
-          key: _textKey,
           child: TextFormField(
             autovalidate: _autovalidate,
             validator: (value) {
@@ -314,7 +314,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
         ),
         Padding(padding: EdgeInsets.all(10)),
         Text(
-          "A continuación decide quien puede ver y editar los resultados:",
+          "A continuación decide el tipo de visivilidad y edición de los resultados:",
           style: Theme.of(context).textTheme.bodyText1,
         ),
         Row(
@@ -327,8 +327,15 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Público', style: Theme.of(context).textTheme.bodyText1),
-                Text('(Siempre visible y editable con contraseña)',
-                    style: Theme.of(context).textTheme.bodyText1)
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: Text(
+                    '(Siempre visible y editable con contraseña)',
+                    style: Theme.of(context).textTheme.bodyText2,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
               ],
             )
           ],
@@ -343,8 +350,15 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Privado', style: Theme.of(context).textTheme.bodyText1),
-                Text('(Solo visible y editable con contraseña)',
-                    style: Theme.of(context).textTheme.bodyText1)
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: Text(
+                    '(Solo visible y editable con contraseña)',
+                    style: Theme.of(context).textTheme.bodyText2,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
               ],
             )
           ],
