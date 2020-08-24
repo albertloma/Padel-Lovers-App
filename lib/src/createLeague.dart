@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:padelloversapp/src/models/CouplePlayers.dart';
 import 'package:padelloversapp/src/models/League.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 
 class CreateLeaguePage extends StatefulWidget {
   const CreateLeaguePage({Key key}) : super(key: key);
@@ -19,9 +21,14 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
   final _textKey = GlobalKey<FormState>();
   bool _autovalidate = false;
 
+  //PLAYER ADD
   bool errorOnPlayesAdd = false;
 
+  //RULES STABLISHMENT
+  final _textKeyPassword = GlobalKey<FormState>();
   int _radioValue = 0;
+  bool _autovalidatePassword = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +93,6 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
           _index = _index;
         },
         onStepContinue: () {
-          print(_index);
           if (_index == 0) {
             //STEP 1 - League Name Validation
             if (!_textKey.currentState.validate()) {
@@ -123,6 +129,11 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               setState(() {
                 errorOnPlayesAdd = false;
               });
+            }
+          } else if (_index == 2) {
+            if (!_textKeyPassword.currentState.validate()) {
+              print('invalid password');
+              return;
             }
           }
           if (_index >= 3) return;
@@ -287,19 +298,27 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
       ),
       content: Column(children: [
         Text(
-          "Ahora debes establecer la contraseña única de la liga. Cualquiera que posea esta contraseña podrá ver, añadir y editar resultados:",
+          "Ahora debes establecer la contraseña única de 4 dígitos de la liga. Cualquiera que posea esta contraseña podrá ver, añadir y editar resultados:",
           style: Theme.of(context).textTheme.bodyText1,
           softWrap: true,
         ),
         Padding(padding: EdgeInsets.all(10)),
         Form(
+          key: _textKeyPassword,
           child: TextFormField(
-            autovalidate: _autovalidate,
+            autovalidate: _autovalidatePassword,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Porfavor, rellena este campo';
+              } else if (value.length != 4) {
+                return 'Debe contener 4 dígitos';
               }
             },
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              LengthLimitingTextInputFormatter(4),
+              WhitelistingTextInputFormatter.digitsOnly
+            ],
             decoration: InputDecoration(
               filled: true,
               hintText: '',
@@ -309,6 +328,9 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               setState(() {
                 newLeague.password = value;
               });
+              if (value.length == 4) {
+                FocusScope.of(context).requestFocus(FocusNode());
+              }
             },
           ),
         ),
@@ -370,14 +392,12 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
   void _handleRadioValueChange(int value) {
     setState(() {
       _radioValue = value;
-      print(_radioValue);
       switch (_radioValue) {
-        case 0:
-          print(_radioValue);
+        case 0: //public visivility
+          newLeague.visibility = 'public';
           break;
-        case 1:
-          break;
-        case 2:
+        case 1: //private visivility
+          newLeague.visibility = 'private';
           break;
       }
     });
