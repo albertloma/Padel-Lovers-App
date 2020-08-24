@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:padelloversapp/src/models/CouplePlayers.dart';
 import 'package:padelloversapp/src/models/League.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 
 class CreateLeaguePage extends StatefulWidget {
   const CreateLeaguePage({Key key}) : super(key: key);
@@ -78,10 +77,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
           step1_NombrarLiga(context),
           step2_JugadoresAdd(context),
           step3_EstablecerReglas(context),
-          Step(
-            title: Text("Forth"),
-            content: Text("This is our forth example."),
-          ),
+          step4_Publicar(context),
         ],
         currentStep: _index,
         onStepTapped: (index) {
@@ -126,6 +122,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               });
               return;
             } else {
+              newLeague.playerList = coupleListModel;
               setState(() {
                 errorOnPlayesAdd = false;
               });
@@ -350,7 +347,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               children: [
                 Text('Público', style: Theme.of(context).textTheme.bodyText1),
                 Container(
-                  width: MediaQuery.of(context).size.width / 1.5,
+                  width: MediaQuery.of(context).size.width / 1.7,
                   child: Text(
                     '(Siempre visible y editable con contraseña)',
                     style: Theme.of(context).textTheme.bodyText2,
@@ -373,7 +370,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               children: [
                 Text('Privado', style: Theme.of(context).textTheme.bodyText1),
                 Container(
-                  width: MediaQuery.of(context).size.width / 1.5,
+                  width: MediaQuery.of(context).size.width / 1.7,
                   child: Text(
                     '(Solo visible y editable con contraseña)',
                     style: Theme.of(context).textTheme.bodyText2,
@@ -386,6 +383,84 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
           ],
         ),
       ]),
+    );
+  }
+
+  Step step4_Publicar(BuildContext context) {
+    return Step(
+      state: StepState.indexed,
+      title: Text(
+        "Publica",
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      content: Column(children: [
+        Text(
+          "Porfavor revisa la información de la liga que acabas de configurar:",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        Padding(padding: EdgeInsets.all(10)),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Nombre de Liga: ${newLeague.name == null ? '' : newLeague.name}",
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        Padding(padding: EdgeInsets.all(5)),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Visibilidad: ${newLeague.visibility == null ? '' : newLeague.visibility}",
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        Padding(padding: EdgeInsets.all(5)),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Contraseña: ${newLeague.password == null ? '' : newLeague.password}",
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        Padding(padding: EdgeInsets.all(10)),
+        parejasView(context)
+      ]),
+    );
+  }
+
+  Widget parejasView(BuildContext context) {
+    if (newLeague.playerList == null || newLeague.playerList.length == 0) {
+      return Container(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "No hay parejas establecidas todavia",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+      );
+    }
+    List<Widget> parejasViewList = new List<Widget>();
+    int i = 1;
+    for (CouplePlayers players in newLeague.playerList) {
+      parejasViewList.add(muestraPareja(players, i));
+      i++;
+    }
+
+    return Container(
+      width: 150,
+      height: 150,
+      child: ListView(
+        children: parejasViewList,
+      ),
+    );
+  }
+
+  Widget muestraPareja(CouplePlayers players, int number) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        "Pareja ${number.toString()}: ${players.player1Name} y ${players.player2Name}",
+        style: Theme.of(context).textTheme.bodyText1,
+      ),
     );
   }
 
