@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:padelloversapp/src/controllers/CreateLeagueController.dart';
 import 'package:padelloversapp/src/models/CouplePlayers.dart';
 import 'package:padelloversapp/src/models/League.dart';
 
@@ -27,6 +28,9 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
   final _textKeyPassword = GlobalKey<FormState>();
   int _radioValue = 0;
   bool _autovalidatePassword = false;
+
+  //CONTROLLER
+  CreateLeagueController createLeagueController = CreateLeagueController();
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +88,12 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
           setState(() {
             _index = index;
           });
+
+          if (coupleListModel != null) {
+            setState(() {
+              newLeague.playerList = coupleListModel;
+            });
+          }
         },
         onStepCancel: () {
           _index = _index;
@@ -133,7 +143,15 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
               return;
             }
           }
-          if (_index >= 3) return;
+          if (_index >= 3) {
+            if (createLeagueController.validateLeagueInfo(newLeague)) {
+              createLeagueController.postLeague(newLeague);
+              return;
+            } else {
+              print('invalid league');
+              return;
+            }
+          }
           setState(() {
             _index += 1;
           });
@@ -402,7 +420,7 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
         Container(
           alignment: Alignment.centerLeft,
           child: Text(
-            "Nombre de Liga: ${newLeague.name == null ? '' : newLeague.name}",
+            "Nombre: ${newLeague.name == null ? '' : newLeague.name}",
             style: Theme.of(context).textTheme.bodyText1,
           ),
         ),
@@ -445,12 +463,9 @@ class _CreateLeaguePageState extends State<CreateLeaguePage> {
       i++;
     }
 
-    return Container(
-      width: 150,
-      height: 150,
-      child: ListView(
-        children: parejasViewList,
-      ),
+    return ListView(
+      shrinkWrap: true,
+      children: parejasViewList,
     );
   }
 
