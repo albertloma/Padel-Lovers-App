@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:padelloversapp/src/allLeaguesPage.dart';
 import 'package:padelloversapp/src/createLeague.dart';
 import 'package:padelloversapp/src/widgets/itemLeague.dart';
 import 'package:padelloversapp/src/widgets/itemResultList.dart';
@@ -28,34 +29,39 @@ class LeagueSelection extends StatelessWidget {
     return Container(
       child: Expanded(
         child: ListView(
-          children: [ItemLeague(), ItemLeague(), ItemLeague()],
+          children: [
+            ItemLeague(),
+            ItemLeague(),
+            ItemLeague(),
+            buscarLigasbtn(context)
+          ],
         ),
       ),
     );
   }
 
   Widget buscarLigasbtn(BuildContext context) {
-    return RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Theme.of(context).primaryColor,
-        child: Container(
-          width: MediaQuery.of(context).size.width / 1.2,
-          height: MediaQuery.of(context).size.height / 6,
-          decoration: new BoxDecoration(
-              gradient: new LinearGradient(
-            colors: [Colors.lightGreen, Colors.yellow],
-          )),
-          child: Center(
-            child: Text(
-              'Buscar Ligas',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ),
-        ),
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreateLeaguePage()));
-        });
+    return Center(
+      child: Column(children: [
+        FlatButton(
+            highlightColor: Colors.lightGreen[100],
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => allLeaguesPage()));
+            },
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(
+                Icons.search,
+                color: Colors.lightGreen,
+              ),
+              Text(
+                'BUSCAR LIGAS',
+                style: TextStyle(color: Colors.lightGreen),
+              )
+            ])),
+        Padding(padding: EdgeInsets.all(10))
+      ]),
+    );
   }
 
   // ignore: non_constant_identifier_names
