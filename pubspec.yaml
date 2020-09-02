@@ -21,10 +21,14 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  http: ^0.12.2
   expansion_tile_card: ^1.1.0
   material_design_icons_flutter: 4.0.5345
   flutter:
     sdk: flutter
+  sqflite: ^1.2.0
+  path_provider: ^1.5.1
+
     
 
 

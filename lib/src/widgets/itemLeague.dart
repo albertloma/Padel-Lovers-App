@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:padelloversapp/src/utils/appInfo.dart';
 
 class ItemLeague extends StatelessWidget {
   const ItemLeague({Key key}) : super(key: key);
@@ -41,7 +42,7 @@ class ItemLeague extends StatelessWidget {
                       'VER RESULTADOS',
                       style: TextStyle(color: Colors.lightGreen),
                     ),
-                    onPressed: () {/* ... */},
+                    onPressed: () {},
                   ),
                 ],
               ),
