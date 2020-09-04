@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:padelloversapp/src/models/League.dart';
 import 'package:padelloversapp/src/utils/appInfo.dart';
@@ -12,12 +14,23 @@ class ItemLeagueSearch extends StatefulWidget {
 }
 
 class _ItemLeagueSearchState extends State<ItemLeagueSearch> {
-  String textButton = 'AÑADIR A MIS LIGAS';
-  TextStyle textStyle = TextStyle(color: Colors.lightGreen);
+  String textButton = '';
+  TextStyle textStyle = TextStyle(color: Colors.white);
+  int justCreated = 0;
+
+  Timer _timer;
 
   @override
   Widget build(BuildContext context) {
     _updateTextOnButton();
+    _timer = new Timer(const Duration(milliseconds: 800), () {
+      if (this.mounted) {
+        setState(() {
+          _updateTextOnButton();
+        });
+      }
+    });
+
     return Container(
       padding: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 10.0),
       child: Center(
