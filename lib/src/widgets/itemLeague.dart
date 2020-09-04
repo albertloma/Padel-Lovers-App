@@ -42,7 +42,10 @@ class ItemLeague extends StatelessWidget {
                       'VER RESULTADOS',
                       style: TextStyle(color: Colors.lightGreen),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      appInfo.storage.setItem('test', 'storage working');
+                      print(appInfo.storage.getItem('test'));
+                    },
                   ),
                 ],
               ),
