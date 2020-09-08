@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:padelloversapp/src/models/League.dart';
-import 'package:padelloversapp/src/utils/appInfo.dart';
 
 class ItemLeagueSearch extends StatefulWidget {
   const ItemLeagueSearch({Key key, this.league}) : super(key: key);
@@ -19,17 +19,18 @@ class _ItemLeagueSearchState extends State<ItemLeagueSearch> {
   int justCreated = 0;
 
   Timer _timer;
+  final _storage = GetStorage();
 
   @override
   Widget build(BuildContext context) {
     _updateTextOnButton();
-    _timer = new Timer(const Duration(milliseconds: 800), () {
+    /* _timer = new Timer(const Duration(milliseconds: 800), () {
       if (this.mounted) {
         setState(() {
           _updateTextOnButton();
         });
       }
-    });
+    });*/
 
     return Container(
       padding: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 10.0),
@@ -84,12 +85,12 @@ class _ItemLeagueSearchState extends State<ItemLeagueSearch> {
   }
 
   void _addKeyLocalStorage() {
-    List<dynamic> keyList = appInfo.storage.getItem('myLeagues');
+    List<dynamic> keyList = _storage.read('myLeagues');
     if (keyList == null) {
       //if is empty, create the storage and add the first value
       List<String> newKeyList = List<String>();
       newKeyList.add(widget.league.id);
-      appInfo.storage.setItem('myLeagues', newKeyList);
+      _storage.write('myLeagues', newKeyList);
       _updateTextOnButton();
       _printKeys();
     } else {
@@ -97,7 +98,7 @@ class _ItemLeagueSearchState extends State<ItemLeagueSearch> {
       if (!keyList.contains(widget.league.id)) {
         //if storage dont contain the key add it
         keyList.add(widget.league.id);
-        appInfo.storage.setItem('myLeagues', keyList);
+        _storage.write('myLeagues', keyList);
         _updateTextOnButton();
         _printKeys();
       } else {
@@ -107,7 +108,7 @@ class _ItemLeagueSearchState extends State<ItemLeagueSearch> {
   }
 
   bool _isThisLeagueOnStorage() {
-    List<dynamic> keyList = appInfo.storage.getItem('myLeagues');
+    List<dynamic> keyList = _storage.read('myLeagues');
     if (keyList == null) {
       print('empty list');
       return false;
@@ -117,7 +118,7 @@ class _ItemLeagueSearchState extends State<ItemLeagueSearch> {
   }
 
   void _printKeys() {
-    List<dynamic> keyList = appInfo.storage.getItem('myLeagues');
+    List<dynamic> keyList = _storage.read('myLeagues');
     if (keyList == null) {
       print('empty list');
     } else {

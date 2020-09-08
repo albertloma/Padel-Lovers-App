@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:padelloversapp/src/controllers/GetAllLeaguesController.dart';
-import 'package:padelloversapp/src/createLeague.dart';
 import 'package:padelloversapp/src/models/League.dart';
-import 'package:padelloversapp/src/widgets/itemLeague.dart';
 import 'package:padelloversapp/src/widgets/itemLeagueSearch.dart';
 
 class allLeaguesPage extends StatefulWidget {

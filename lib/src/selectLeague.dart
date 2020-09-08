@@ -1,18 +1,96 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:padelloversapp/src/allLeaguesPage.dart';
 import 'package:padelloversapp/src/createLeague.dart';
-import 'package:padelloversapp/src/utils/appInfo.dart';
 import 'package:padelloversapp/src/widgets/itemLeague.dart';
-import 'package:padelloversapp/src/widgets/itemResultList.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'controllers/GetAllMyLeaguesInfo.dart';
+import 'models/League.dart';
 
-class LeagueSelection extends StatelessWidget {
+class LeagueSelection extends StatefulWidget {
   const LeagueSelection({Key key}) : super(key: key);
 
   @override
+  _LeagueSelectionState createState() => _LeagueSelectionState();
+}
+
+class _LeagueSelectionState extends State<LeagueSelection> {
+  Widget listItemList;
+
+  Timer _timer;
+
+  final getLeagueController = GetAllMyLeaguesInfo();
+  final _storage = GetStorage();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    setState(() {
+      updateSelectionScreen();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _storage.listenKey('myLeagues', (value) {
+      print('STORAGE CHANGEDDDDDDD');
+      updateSelectionScreen();
+    });
+    setState(() {
+      updateSelectionScreen();
+    });
+
     return selectionMenu(context);
+  }
+
+  void updateSelectionScreen() {
+    setState(() {
+      listItemList = FutureBuilder(
+          future: getLeagueController.fetchMyLeaguesInfo(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<League>> snapshot) {
+            if (snapshot.hasData) {
+              List<Widget> itemLeagueList = List<Widget>();
+              List<League> listLeagues = snapshot.data;
+              listLeagues.forEach((element) {
+                itemLeagueList.add(ItemLeague(
+                  league: element,
+                ));
+              });
+
+              itemLeagueList.add(buscarLigasbtn(context));
+              itemLeagueList.add(FloatingActionButton(
+                onPressed: () {
+                  print('cleaning memory');
+                  _storage.erase();
+                  _printKeys();
+                },
+                backgroundColor: Colors.red,
+              ));
+              return Container(
+                child: Expanded(
+                  child: ListView(
+                    children: itemLeagueList,
+                  ),
+                ),
+              );
+            } else {
+              if (_storage.read('myLeagues') == null) {
+                return Container(
+                  child: Expanded(
+                    child: ListView(
+                      children: [buscarLigasbtn(context)],
+                    ),
+                  ),
+                );
+              }
+              return Center(child: CircularProgressIndicator());
+            }
+          });
+    });
   }
 
   Widget selectionMenu(BuildContext context) {
@@ -31,16 +109,23 @@ class LeagueSelection extends StatelessWidget {
   Widget listaDeLigas(BuildContext context) {
     return Container(
       child: Expanded(
-        child: ListView(
-          children: [
-            ItemLeague(),
-            ItemLeague(),
-            ItemLeague(),
-            buscarLigasbtn(context)
-          ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [listItemList],
         ),
       ),
     );
+  }
+
+  void _printKeys() {
+    List<dynamic> keyList = _storage.read('myLeagues');
+    if (keyList == null) {
+      print('empty list');
+    } else {
+      for (var key in keyList) {
+        print(key);
+      }
+    }
   }
 
   Widget buscarLigasbtn(BuildContext context) {
@@ -67,7 +152,6 @@ class LeagueSelection extends StatelessWidget {
     );
   }
 
-  // ignore: non_constant_identifier_names
   Widget TitleMisLigas(BuildContext context) {
     return SafeArea(
       child: Column(
