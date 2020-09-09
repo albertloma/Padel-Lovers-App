@@ -106,10 +106,9 @@ class _ItemLeagueState extends State<ItemLeague> {
           ),
           FlatButton(
             highlightColor: Colors.lightGreen[100],
-            child: const Text(
-              'VER RESULTADOS',
-              style: TextStyle(color: Colors.lightGreen),
-            ),
+            child: Text(isSelected ? 'SELECCIONADO' : 'VER RESULTADOS',
+                style: TextStyle(
+                    color: isSelected ? Colors.grey[600] : Colors.lightGreen)),
             onPressed: () {
               _storage.write('currentLeague', widget.league.id);
             },
