@@ -72,37 +72,37 @@ class _ItemLeagueSearchState extends State<ItemLeagueSearch> {
 
   void _updateTextOnButton() {
     if (_isThisLeagueOnStorage()) {
-      setState(() {
-        textButton = 'SIGUENDO';
-        textStyle = TextStyle(color: Colors.grey);
-      });
+      if (mounted) {
+        setState(() {
+          textButton = 'SIGUENDO';
+          textStyle = TextStyle(color: Colors.grey);
+        });
+      }
     } else {
-      setState(() {
-        textButton = 'AÑADIR A MIS LIGAS';
-        textStyle = TextStyle(color: Colors.lightGreen);
-      });
+      if (mounted) {
+        setState(() {
+          textButton = 'AÑADIR A MIS LIGAS';
+          textStyle = TextStyle(color: Colors.lightGreen);
+        });
+      }
     }
   }
 
-  void _addKeyLocalStorage() {
-    List<dynamic> keyList = _storage.read('myLeagues');
+  Future<void> _addKeyLocalStorage() async {
+    List<dynamic> keyList = await _storage.read('myLeagues');
     if (keyList == null) {
       //if is empty, create the storage and add the first value
       List<String> newKeyList = List<String>();
       newKeyList.add(widget.league.id);
-      _storage.write('myLeagues', newKeyList);
+      await _storage.write('myLeagues', newKeyList);
       _updateTextOnButton();
-      _printKeys();
     } else {
       //is not empty
       if (!keyList.contains(widget.league.id)) {
         //if storage dont contain the key add it
         keyList.add(widget.league.id);
-        _storage.write('myLeagues', keyList);
+        await _storage.write('myLeagues', keyList);
         _updateTextOnButton();
-        _printKeys();
-      } else {
-        print('value already in storage');
       }
     }
   }

@@ -27,12 +27,6 @@ class getLeagueByKeyController {
     newLeague.visibility = myMap['visibility'];
     newLeague.password = myMap['password'];
 
-    print('LEAGUE SAVED INFO:');
-    print(newLeague.id);
-    print(newLeague.name);
-    print(newLeague.password);
-    print(newLeague.visibility);
-
     return newLeague;
   }
 }

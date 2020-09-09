@@ -28,20 +28,29 @@ class _LeagueSelectionState extends State<LeagueSelection> {
     // TODO: implement initState
 
     super.initState();
-    setState(() {
-      updateSelectionScreen();
-    });
+    if (mounted) {
+      setState(() {
+        updateSelectionScreen();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _storage.listenKey('myLeagues', (value) {
       print('STORAGE CHANGEDDDDDDD');
-      updateSelectionScreen();
+      if (mounted) {
+        setState(() {
+          updateSelectionScreen();
+        });
+      }
     });
-    setState(() {
-      updateSelectionScreen();
-    });
+
+    if (mounted) {
+      setState(() {
+        updateSelectionScreen();
+      });
+    }
 
     return selectionMenu(context);
   }
